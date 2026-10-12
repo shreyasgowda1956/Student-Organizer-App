@@ -48,3 +48,36 @@ fun AssignmentForm(
     }
     OutlinedTextField(description,onDescriptionChange,label={Text("Description / notes")},minLines=3,maxLines=5,modifier=Modifier.fillMaxWidth())
 }
+
+
+/** Data used by the dashboard course cards. */
+data class Course(
+    val name: String,
+    val code: String,
+    val instructor: String,
+    val progress: Float
+)
+
+@Composable
+fun StudentProfile(name: String, studentId: String, program: String) {
+    Card(
+        modifier = Modifier.fillMaxWidth().padding(12.dp),
+        shape = RoundedCornerShape(18.dp)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                imageVector = Icons.Default.School,
+                contentDescription = "Student",
+                tint = Color(0xFF4F46E5),
+                modifier = Modifier.size(56.dp)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(name, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+            Text(studentId, color = Color(0xFF4F46E5), fontWeight = FontWeight.SemiBold)
+            Text(program, style = MaterialTheme.typography.bodyMedium)
+        }
+    }
+}
