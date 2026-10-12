@@ -18,8 +18,17 @@ jobs:
         with:
           gradle-version: '8.9'
       - name: Install Android SDK
+        shell: bash
         run: |
-          yes | sdkmanager --licenses
-          sdkmanager "platforms;android-35" "build-tools;35.0.0"
+          export ANDROID_HOME="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
+          export ANDROID_SDK_ROOT="$ANDROID_HOME"
+          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"
+          if [ -x "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" ]; then
+            SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          else
+            SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -name sdkmanager -type f | head -n 1)"
+          fi
+          "$SDKMANAGER" --licenses < /dev/null || true
+          "$SDKMANAGER" "platforms;android-35" "build-tools;35.0.0"
       - name: Build debug APK
         run: gradle --no-daemon :app:assembleDebug
